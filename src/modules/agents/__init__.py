@@ -9,6 +9,7 @@ from .central_rnn_agent import CentralRNNAgent
 from .mlp_agent import MLPAgent
 from .atten_rnn_agent import ATTRNNAgent
 from .noisy_agents import NoisyRNNAgent
+from .vq_agent import VQAgent
 
 REGISTRY["rnn"] = RNNAgent
 REGISTRY["n_rnn"] = NRNNAgent
@@ -19,3 +20,4 @@ REGISTRY["central_rnn"] = CentralRNNAgent
 REGISTRY["mlp"] = MLPAgent
 REGISTRY["att_rnn"] = ATTRNNAgent
 REGISTRY["noisy_rnn"] = NoisyRNNAgent
+REGISTRY["vq"] = VQAgent

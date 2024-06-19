@@ -249,7 +249,8 @@ class StarCraft2Env(MultiAgentEnv):
         self.shield_bits_enemy = 1 if self._bot_race == "P" else 0
         self.unit_type_bits = map_params["unit_type_bits"]
         self.map_type = map_params["map_type"]
-
+        self.unit_dim = 4 + self.shield_bits_ally + self.unit_type_bits
+        
         self.max_reward = (
             self.n_enemies * self.reward_death_value + self.reward_win
         )

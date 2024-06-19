@@ -2,6 +2,7 @@ import datetime
 import os
 import pprint
 import time
+import uuid
 import threading
 import torch as th
 from types import SimpleNamespace as SN
@@ -22,6 +23,9 @@ def get_agent_own_state_size(env_args):
     # qatten parameter setting (only use in qatten)
     return  4 + sc_env.shield_bits_ally + sc_env.unit_type_bits
 
+def generate_tag(algo_name, map_name):
+    return algo_name + "-" + map_name + "-" + uuid.uuid4().hex[:6]
+
 def run(_run, _config, _log):
 
     # check args sanity
@@ -29,6 +33,7 @@ def run(_run, _config, _log):
 
     args = SN(**_config)
     args.device = "cuda" if args.use_cuda else "cpu"
+    args.tag = generate_tag(args.name, args.env_args["map_name"])
 
     # setup loggers
     logger = Logger(_log)
@@ -46,6 +51,9 @@ def run(_run, _config, _log):
         tb_logs_direc = os.path.join(dirname(dirname(dirname(abspath(__file__)))), "results", "tb_logs")
         tb_exp_direc = os.path.join(tb_logs_direc, "{}").format(unique_token)
         logger.setup_tb(tb_exp_direc)
+    
+    if args.use_wandb:
+        logger.setup_wandb(args)
 
     # sacred is on by default
     logger.setup_sacred(_run)

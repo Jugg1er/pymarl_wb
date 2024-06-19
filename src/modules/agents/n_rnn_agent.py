@@ -40,3 +40,4 @@ class NRNNAgent(nn.Module):
             q = self.fc2(hh)
 
         return q.view(b, a, -1), hh.view(b, a, -1)
+        # return q, hh

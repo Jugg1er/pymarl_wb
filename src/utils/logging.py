@@ -2,6 +2,7 @@ from collections import defaultdict
 import logging
 import numpy as np
 import torch as th
+import wandb
 
 class Logger:
     def __init__(self, console_logger):
@@ -10,6 +11,7 @@ class Logger:
         self.use_tb = False
         self.use_sacred = False
         self.use_hdf = False
+        self.use_wandb = False
 
         self.stats = defaultdict(lambda: [])
 
@@ -19,6 +21,21 @@ class Logger:
         configure(directory_name)
         self.tb_logger = log_value
         self.use_tb = True
+    
+    def setup_wandb(self, config):
+        wandb.init(
+            project=config.project,
+            name=config.tag,
+            job_type=config.env_args["map_name"],
+            config=config.__dict__,
+        )
+        wandb.config = config
+        # setup a custom step metric so that we can track
+        # environment steps instead of wandb internal episodes
+        wandb.define_metric("train/step")
+        wandb.define_metric("train/*", step_metric="train/step")
+        wandb.define_metric("test/*", step_metric="train/step")
+        self.use_wandb = True
 
     def setup_sacred(self, sacred_run_dict):
         self.sacred_info = sacred_run_dict.info
@@ -37,6 +54,15 @@ class Logger:
             else:
                 self.sacred_info["{}_T".format(key)] = [t]
                 self.sacred_info[key] = [value]
+        
+        if self.use_wandb:
+            # modify the key to fit with the wandb convention
+            if not key.startswith("test_"):
+                key = "train/" + key
+            else:
+                key = key[len("test_") :]
+                key = "test/" + key
+            wandb.log({key: value, "train/step": t})
 
     def print_recent_stats(self):
         log_str = "Recent Stats | t_env: {:>10} | Episode: {:>8}\n".format(*self.stats["episode"][-1])
