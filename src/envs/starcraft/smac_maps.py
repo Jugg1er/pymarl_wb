@@ -32,6 +32,33 @@ map_param_registry = {
         "b_race": "T",
         "unit_type_bits": 2,
         "map_type": "bZ_hM"
+    },
+    "7sz": {
+        "n_agents": 14,
+        "n_enemies": 14,
+        "limit": 200,
+        "a_race": "P",
+        "b_race": "P",
+        "unit_type_bits": 2,
+        "map_type": "stalkers_and_zealots",
+    },
+    "5s10z": {
+        "n_agents": 15,
+        "n_enemies": 15,
+        "limit": 200,
+        "a_race": "P",
+        "b_race": "P",
+        "unit_type_bits": 2,
+        "map_type": "stalkers_and_zealots",
+    },
+    "1c3s8z_vs_1c3s9z": {
+        "n_agents": 12,
+        "n_enemies": 13,
+        "limit": 180,
+        "a_race": "P",
+        "b_race": "P",
+        "unit_type_bits": 3,
+        "map_type": "colossi_stalkers_zealots",
     }
 }
 
